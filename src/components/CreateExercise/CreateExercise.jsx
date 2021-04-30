@@ -8,6 +8,7 @@ import {
   MenuItem,
   InputLabel,
   FormHelperText,
+  FormControl,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import DateFnsUtils from '@date-io/date-fns'
@@ -96,23 +97,23 @@ function CreateExercise() {
           noValidate
           autoComplete="off"
         >
-          <Select
-            labelId="demo-simple-select-placeholder-label-label"
-            id="demo-simple-select-placeholder-label"
-            value={exercise.username}
-            onChange={handleChange}
-            name="username"
-          >
-            <MenuItem aria-label="None" disabled value="">
-              placeholder
-            </MenuItem>
-            {users &&
-              users.map((user, index) => (
-                <MenuItem key={index} value={user.username}>
-                  {user.username}
-                </MenuItem>
-              ))}
-          </Select>
+          <FormControl>
+            <InputLabel htmlFor="age-simple">Username</InputLabel>
+            <Select
+              labelId="demo-simple-select-placeholder-label-label"
+              id="demo-simple-select-placeholder-label"
+              value={exercise.username}
+              onChange={handleChange}
+              name="username"
+            >
+              {users &&
+                users.map((user, index) => (
+                  <MenuItem key={index} value={user.username}>
+                    {user.username}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
           <TextField
             id="standard-basic"
             label="Description"
