@@ -31,13 +31,13 @@ function BottomBar(props) {
           component={Link}
           to="/createuser"
           value="Create User"
-          label="Create Exercises"
+          label="Create User"
         />
         <BottomNavigationAction
           component={Link}
           to="/createexercise"
           value="Create Exercise"
-          label="Create User"
+          label="Create Exercise"
         />
       </BottomNavigation>
     </div>
