@@ -15,12 +15,14 @@ function App() {
     <div className="App">
       <Router>
         <NavBar actualPage={actualPage} className="NavBar" />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/exercises" component={Exercises} />
-          <Route path="/createuser" component={CreateUser} />
-          <Route path="/createexercise" component={CreateExercise} />
-        </Switch>
+        <div className="switch">
+          <Switch style={{ margin: 100 }}>
+            <Route exact path="/" component={Home} />
+            <Route path="/exercises" component={Exercises} />
+            <Route path="/createuser" component={CreateUser} />
+            <Route path="/createexercise" component={CreateExercise} />
+          </Switch>
+        </div>
         <BottomBar setActualPage={setActualPage} />
       </Router>
     </div>

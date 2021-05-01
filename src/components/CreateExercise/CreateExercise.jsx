@@ -7,14 +7,14 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  FormHelperText,
   FormControl,
+  Input,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import DateFnsUtils from '@date-io/date-fns'
 import 'date-fns'
 import axios from 'axios'
-
+import { storage } from '../../firebase/firebase.config'
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -28,6 +28,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 function CreateExercise() {
+  function capitalizeFirstLetter(str) {
+    // converting first letter to uppercase
+    const capitalized = str.charAt(0).toUpperCase() + str.slice(1)
+
+    return capitalized
+  }
   const [users, setUsers] = useState([])
 
   useEffect(() => {
@@ -40,18 +46,18 @@ function CreateExercise() {
     axios(config)
       .then((response) => {
         setUsers(response.data)
-        console.log(response)
       })
       .catch((error) => {
         console.log(error)
       })
   }, [])
-  const saveExercise = () => {
+  const saveExercise = (urlImage) => {
     let data = JSON.stringify({
       username: exercise.username,
       description: exercise.description,
       duration: exercise.duration,
       date: exercise.date,
+      photo: urlImage,
     })
     let config = {
       method: 'post',
@@ -76,14 +82,33 @@ function CreateExercise() {
     description: '',
     duration: 0,
     date: null,
+    photo: '',
   })
   const handleSubmit = (event) => {
+    storage
+      .ref('images')
+      .child(exercise.photo.name)
+      .getDownloadURL()
+      .then((url) => {
+        console.log(url)
+        saveExercise(url)
+      })
+  }
+  const handleStorage = (event) => {
     event.preventDefault()
-    console.log(exercise)
-    saveExercise()
+    storage
+      .ref(`images/${exercise.photo.name}`)
+      .put(exercise.photo)
+      .then(function (snapshot) {
+        handleSubmit()
+      })
   }
   const handleChange = (event) => {
-    setExercise({ ...exercise, [event.target.name]: event.target.value })
+    if (event.target.name === 'photo') {
+      setExercise({ ...exercise, [event.target.name]: event.target.files[0] })
+    } else {
+      setExercise({ ...exercise, [event.target.name]: event.target.value })
+    }
   }
   const handleDateChange = (date) => {
     setExercise({ ...exercise, date: date })
@@ -93,12 +118,12 @@ function CreateExercise() {
       <Container>
         <form
           className={classes.root}
-          onSubmit={handleSubmit}
+          onSubmit={handleStorage}
           noValidate
           autoComplete="off"
         >
           <FormControl>
-            <InputLabel htmlFor="age-simple">Username</InputLabel>
+            <InputLabel>Username</InputLabel>
             <Select
               labelId="demo-simple-select-placeholder-label-label"
               id="demo-simple-select-placeholder-label"
@@ -109,7 +134,7 @@ function CreateExercise() {
               {users &&
                 users.map((user, index) => (
                   <MenuItem key={index} value={user.username}>
-                    {user.username}
+                    {capitalizeFirstLetter(user.username)}
                   </MenuItem>
                 ))}
             </Select>
@@ -136,8 +161,8 @@ function CreateExercise() {
               margin="normal"
               id="date-picker-inline"
               label="Date picker inline"
-              placeholder="MM/DD/YYYY"
-              format={'MM/dd/yyyy'}
+              placeholder="DD/MM/YYYY"
+              format={'dd/MM/yyyy'}
               value={exercise.date}
               name="date"
               onChange={handleDateChange}
@@ -146,7 +171,13 @@ function CreateExercise() {
               }}
             />
           </MuiPickersUtilsProvider>
-
+          <Input
+            type="file"
+            className="form-control"
+            id="photo"
+            name="photo"
+            onChange={handleChange}
+          />
           <br />
           <Button type="submit" variant="contained" color="primary">
             Create Exercise

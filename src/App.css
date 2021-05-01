@@ -4,6 +4,9 @@
 header {
   margin-bottom: 20px;
 }
+.switch {
+  margin-bottom: 80px;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
