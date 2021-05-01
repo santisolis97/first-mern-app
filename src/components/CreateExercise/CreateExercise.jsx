@@ -9,6 +9,7 @@ import {
   InputLabel,
   FormControl,
   Input,
+  Grid,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import DateFnsUtils from '@date-io/date-fns'
@@ -19,6 +20,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -27,14 +29,17 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }))
-function CreateExercise() {
-  function capitalizeFirstLetter(str) {
-    // converting first letter to uppercase
-    const capitalized = str.charAt(0).toUpperCase() + str.slice(1)
 
-    return capitalized
-  }
+function CreateExercise() {
+  const classes = useStyles()
   const [users, setUsers] = useState([])
+  const [exercise, setExercise] = useState({
+    username: '',
+    description: '',
+    duration: 0,
+    date: null,
+    photo: '',
+  })
 
   useEffect(() => {
     let config = {
@@ -51,6 +56,7 @@ function CreateExercise() {
         console.log(error)
       })
   }, [])
+
   const saveExercise = (urlImage) => {
     let data = JSON.stringify({
       username: exercise.username,
@@ -75,15 +81,14 @@ function CreateExercise() {
         console.log(error)
       })
   }
-  const classes = useStyles()
 
-  const [exercise, setExercise] = useState({
-    username: '',
-    description: '',
-    duration: 0,
-    date: null,
-    photo: '',
-  })
+  function capitalizeFirstLetter(str) {
+    // converting first letter to uppercase
+    const capitalized = str.charAt(0).toUpperCase() + str.slice(1)
+
+    return capitalized
+  }
+
   const handleSubmit = (event) => {
     storage
       .ref('images')
@@ -115,75 +120,87 @@ function CreateExercise() {
   }
   return (
     <div>
-      <Container>
-        <form
-          className={classes.root}
-          onSubmit={handleStorage}
-          noValidate
-          autoComplete="off"
-        >
-          <FormControl>
-            <InputLabel>Username</InputLabel>
-            <Select
-              labelId="demo-simple-select-placeholder-label-label"
-              id="demo-simple-select-placeholder-label"
-              value={exercise.username}
+      <form
+        className={classes.root}
+        onSubmit={handleStorage}
+        noValidate
+        autoComplete="off"
+      >
+        <Grid container direction="row" justify="center" alignItems="center">
+          <Grid item>
+            <FormControl>
+              <InputLabel>Username</InputLabel>
+              <Select
+                labelId="demo-simple-select-placeholder-label-label"
+                id="demo-simple-select-placeholder-label"
+                value={exercise.username}
+                onChange={handleChange}
+                name="username"
+              >
+                {users &&
+                  users.map((user, index) => (
+                    <MenuItem key={index} value={user.username}>
+                      {capitalizeFirstLetter(user.username)}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <TextField
+              id="standard-basic"
+              label="Description"
+              name="description"
+              value={exercise.description}
               onChange={handleChange}
-              name="username"
-            >
-              {users &&
-                users.map((user, index) => (
-                  <MenuItem key={index} value={user.username}>
-                    {capitalizeFirstLetter(user.username)}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-          <TextField
-            id="standard-basic"
-            label="Description"
-            name="description"
-            value={exercise.description}
-            onChange={handleChange}
-          />
-          <TextField
-            id="standard-basic"
-            label="Duration"
-            name="duration"
-            type="number"
-            value={exercise.duratin}
-            onChange={handleChange}
-          />
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              disableToolbar
-              variant="inline"
-              margin="normal"
-              id="date-picker-inline"
-              label="Date picker inline"
-              placeholder="DD/MM/YYYY"
-              format={'dd/MM/yyyy'}
-              value={exercise.date}
-              name="date"
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
             />
-          </MuiPickersUtilsProvider>
-          <Input
-            type="file"
-            className="form-control"
-            id="photo"
-            name="photo"
-            onChange={handleChange}
-          />
+          </Grid>
+          <Grid item>
+            <TextField
+              id="standard-basic"
+              label="Duration"
+              name="duration"
+              type="number"
+              value={exercise.duratin}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date picker inline"
+                placeholder="DD/MM/YYYY"
+                format={'dd/MM/yyyy'}
+                value={exercise.date}
+                name="date"
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item>
+            <Input
+              type="file"
+              className="form-control"
+              id="photo"
+              name="photo"
+              onChange={handleChange}
+            />
+          </Grid>
           <br />
-          <Button type="submit" variant="contained" color="primary">
-            Create Exercise
-          </Button>
-        </form>
-      </Container>
+          <Grid item>
+            <Button type="submit" variant="contained" color="primary">
+              Create Exercise
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 import "firebase/storage";
 
 var firebaseConfig = {
-  apiKey: "AIzaSyDd6KlaQBv4wFG0iANFucn8t6CZgd2UxP4",
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "mere-exercise-tracker.firebaseapp.com",
   projectId: "mere-exercise-tracker",
   storageBucket: "mere-exercise-tracker.appspot.com",

@@ -13,7 +13,7 @@ function Exercises() {
   }, [])
   return (
     <Grid container direction="row" justify="center" alignItems="center">
-      <Grid item xs={6}>
+      <Grid item>
         {data.map((row, index) => (
           <Card className="card" key={index} exercise={row} />
         ))}

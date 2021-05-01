@@ -10,7 +10,7 @@ import { red } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: '500px',
+    width: '75vw',
     border: '0.3px solid #b0bec5',
     marginBottom: '25px',
   },
@@ -56,7 +56,7 @@ export default function RecipeReviewCard(props) {
       <CardMedia
         className={classes.media}
         image={props.exercise.photo}
-        title="Paella dish"
+        title={props.exercise.description}
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">

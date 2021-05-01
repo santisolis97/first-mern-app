@@ -11,6 +11,7 @@ import BottomBar from "./components/BottomBar/BottomBar";
 
 function App() {
   const [actualPage, setActualPage] = useState("Home");
+  console.log(process.env.REACT_APP_API_KEY);
   return (
     <div className="App">
       <Router>

@@ -4,7 +4,7 @@ import { Container } from '@material-ui/core'
 
 function Home() {
   return (
-    <Container maxWidth="xs">
+    <Container>
       Home
       <br />
     </Container>
